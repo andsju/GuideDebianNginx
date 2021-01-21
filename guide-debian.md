@@ -48,9 +48,12 @@ Spara nyckeln och slutför guiden genom att klicka "Create"
 Servern skapas och du kommer se information om status, resurser, IP-adress och SSH Access
 ![Linode - create](images/linode-debian-install-3.png)
 
-Kopiera koden (kommandot) som finns för SSH Access.
+Kopiera koden (kommandot) som finns för SSH Access. Kommandot ser ut så här: `ssh root@172.104.246.137`
 
-I PowerShell anger du därefter kommandot. Nu kommer nycklar verifieras och du behöver bekräfta (yes) för att ange att webbplatsen ska vara känd.
+I PowerShell anger du därefter kommandot. 
+`ssh root@172.104.246.137`
+
+När du loggar in från en ny datormiljö  kommer nycklar verifieras och du behöver bekräfta för att ange att webbplatsen ska vara känd.
 Ange passphrase som finns till ssh nyckeln du skapat.
 ![Linode - create](images/linode-debian-connect-1.png)
 
@@ -61,3 +64,29 @@ När du är inloggad på servern kommer du se att du är inloggad som root@local
 I en webbservermiljön finns flera inställningar som du kan göra för att säkra upp servern. Vanligt är att root kontot som du är ansluten med endast används för övergripande åtgärder - som att uppdatera och underhålla systmemet.
 
 För att hantera webbserver funktioner bör du skapa ett konto - i guiden ett konto med namnet *webmaster*
+
+Skapa användaren webmaster
+`adduser webmaster`
+
+Skapa ett lösenord. Frågor som följer kan du ange information vid behov
+![Linode - create](images/debian-adduser.png)
+
+Lägg till användaren i gruppen sudo - ger utökade rättigheter 
+`adduser webmaster sudo` 
+
+Nu kan du logga in i Debian med två konton:
+`ssh root@172.104.246.137`
+`ssh webmaster@172.104.246.137`
+
+För att använda utökade rättigheter som webmaster inleds kommandon med `sudo`, ex för att visa dolda filer:
+`sudo ls -la` 
+
+Logga ut från root kontot
+`exit`
+
+
+(sudo chown -R "$USER":www-data /var/www/html/example.com/)
+
+sudo ufw app info "Nginx Full"
+
+sudo ufw allow in "Nginx Full"
