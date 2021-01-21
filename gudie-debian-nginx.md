@@ -450,7 +450,8 @@ Skapa en ngninx konfigurationsfil för site3
 `nano /etc/nginx/sites-available/site3.conf`
 
 *site3.conf*
-------------
+
+```
 server {
     listen         8083;
     listen         [::]:8083;
@@ -462,9 +463,9 @@ server {
         proxy_pass         http://localhost:5000;
     }
 }
-------------
+```
 
-![Intall Nginx](images/debian-nodejs.png)
+![Intall Nginx](images/debian-nodejs-1.png)
 
 
 Aktivera webbplatsen genom att länka filen i nginx 
