@@ -7,14 +7,15 @@ I guiden används en och samma server för olika webbserverspråk.
 - 8082: PHP, MariaDB, och Wordpress 
 - 8083: Node.js med nginx som proxy server
 
-I exemplet har servern följande ip-adress: 172.104.246.137
+I exemplet har servern följande ip-adress: 172.104.246.137. *Se till att byta ut det för att passa din konfigurering*.
 
-Uppdatera Debian
-Logga in med ditt root konto och uppdatera systemet 
+### Uppdatera Debian
+
+Logga in med ditt root konto och uppdatera systemet. 
 
 `apt-get update && apt-get upgrade`
 
-Installera webbservern nginx
+Installera webbservern nginx.
 
 `sudo apt install nginx`
 
@@ -26,30 +27,35 @@ Starta en webbläsare och ange ip-adressen *http://172.104.246.137*. Om installa
 
 ![Intall Nginx](images/nginx-install-2.png)
 
-Kommando som visar status för nginx
+Kommando som visar status för nginx.
 
 `sudo systemctl status nginx`;
 
-Andra kommandon som du kan ange är ex *stop start reload restart enable disable* 
+Andra kommandon som du kan ange är ex *stop start reload restart enable disable*. 
+
 
 ---
 
+
 ## Skapa en webbplats för statisk html
+
 ***site1***
 
 - port: 8081 
 - sökväg: /var/www/site1 
 
-Skapa mapp för webbplatsens filer
+Skapa mapp för webbplatsens filer.
 
 `sudo mkdir -p /var/www/site1`
 
-Skapa index.html "Hello World"
+
 För att skapa filer i Debian kan kommandot touch användas, eller kan du alternativt låta editorn nano skapa filen.
+Skapa index.html "Hello World".
 
 `sudo nano /var/www/site1/index.html`
 
 I index.html anger du kod för en grundläggande html sida. Skriv "Hello World" i body elementet.
+
 
 *index.html*
 ```
@@ -65,21 +71,22 @@ I index.html anger du kod för en grundläggande html sida. Skriv "Hello World" 
 
 ![Intall Nginx](images/site1-code.png)
 
-I editorn sparar du filen med `ctrl+k` och bekräftar filnamnet med `y`
+I editorn sparar du filen med `ctrl+k` och bekräftar filnamnet med `y`.
 
 Webbserver nginx finns i mappen `/etc/`. Webbplatser utgår från konfigurationsfiler som finns placerad i mappen *sites-available*.
-Se katalogstrukturen genom att navigera till mappen för nginx
+Se katalogstrukturen genom att navigera till mappen för nginx.
 
 `cd /etc/nginx`
 
 ![Intall Nginx](images/nginx-structure.png)
 
 
-Skapa en ngninx konfigurationsfil för site1
+Skapa en ngninx konfigurationsfil för site1.
 
 `nano /etc/nginx/sites-available/site1.conf`
 
-I filen anges portnummer och sökvägar
+I filen anges portnummer och sökvägar.
+
 
 *site1.conf*
 ```
@@ -96,15 +103,15 @@ server {
 }
 ```
 
-Aktivera webbplatsen genom att länka filen i nginx 
+Aktivera webbplatsen genom att länka filen i nginx. 
 
 `sudo ln -s /etc/nginx/sites-available/site1.conf /etc/nginx/sites-enabled/`
 
-Kontrollera konfigurationsfilen
+Kontrollera konfigurationsfilen.
 
 `sudo nginx -t`
 
-Ladda om nginx för att webbplatsen ska visas  
+Ladda om nginx för att webbplatsen ska visas.  
 
 `sudo nginx -s reload`
 
@@ -116,24 +123,27 @@ Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8081*. Nu bö
 ---
 
 
-### Skapa en webbplats med stöd för php, MariaDB, Wordpress - site2
+### Skapa en webbplats med stöd för php, MariaDB, Wordpress  
+
+***site2***
+
 - port: 8082 
 - sökväg: /var/www/site2
 
-Den här guiden är uppdelad i 3 delar
+Den här guiden är uppdelad i 3 delar.
 
 #### Del 1: php
 
-Installera stöd för serverspråket php
+Installera stöd för serverspråket php.
 
 `sudo apt install php-fpm`
 
-Kommandot installera aktuell version som finns i Debians repo
+Kommandot installera aktuell version som finns i Debians repo.
 
 ![Intall Nginx](images/debian-php-1.png)
 
 
-Visa version av php
+Visa version av php.
 
 `php -v`
 
@@ -141,19 +151,20 @@ Ange sökvägar i inställningsfilen för php (*php.ini*). Kontrollera att versi
 
 `sudo sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.3/fpm/php.ini`
 
-Ladda om php
+Ladda om php.
 
 `sudo systemctl restart php7.3-fpm`
 
-Skapa mapp för webbplatsens filer
+Skapa mapp för webbplatsens filer.
 
 `sudo mkdir -p /var/www/site2`
 
-Skapa filem phpinfo.php som visar information om php version
+Skapa filem phpinfo.php som visar information om php version.
 
 `sudo nano /var/www/site2/phpinfo.php`
 
-I filen används php kommandon `phpinfo();`
+I filen används php kommandot `phpinfo();`
+
 
 *phpinfo.php*
 ```
@@ -162,15 +173,16 @@ phpinfo();
 ?>
 ```
 
-![Intall Nginx](images/debian-php-2.png)
+![Intall php](images/debian-php-2.png)
 
 
-Skapa en ngninx konfigurationsfil för site2
+Skapa en ngninx konfigurationsfil för site2.
 
 `nano /etc/nginx/sites-available/site2.conf`
 
 I filen anges portnummer och sökvägar för att nginx ska hantera php filer. I index anges index.php före index.html.
-Se till att rätt version av php finns i sökvägen för fastcgi_pass `unix:/run/php/php7.3-fpm.sock;`  
+Se till att rätt version av php finns i sökvägen för fastcgi_pass `unix:/run/php/php7.3-fpm.sock;`.
+
 
 *site2.conf*
 ```
@@ -195,15 +207,15 @@ server {
 }
 ```
 
-Aktivera webbplatsen genom att länka filen i nginx 
+Aktivera webbplatsen genom att länka filen i nginx. 
 
 `sudo ln -s /etc/nginx/sites-available/site2.conf /etc/nginx/sites-enabled/`
 
-Kontrollera konfigurationsfilen
+Kontrollera konfigurationsfilen.
 
 `sudo nginx -t`
 
-![Intall Nginx](images/debian-php-3.png)
+![Intall php](images/debian-php-3.png)
 
 
 Ladda om nginx för att webbplatsen ska visas  
@@ -222,7 +234,7 @@ Att accessa ip-adressen utan att ange filnamnet phpinfo.php är status koden 403
 
 #### Del 2: MariaDB
 
-Installera databasen MariaDB
+Installera databasen MariaDB.
 
 `sudo apt install mariadb-server php-mysql`
 
@@ -230,10 +242,10 @@ Kontrollera att du kan logga in i databasen
 
 `sudo mysql -u root`
 
-![Intall Nginx](images/debian-mariadb-1.png)
+![Intall MariaDB](images/debian-mariadb-1.png)
 
 
-Avsluta sessionen men databasen
+Avsluta sessionen men databasen.
 
 `quit`
 
@@ -241,10 +253,11 @@ Starta en gudie för att öka säkerheten i databasen. Bekräfta och godkänn de
 
 `sudo mysql_secure_installation`
 
-![Intall Nginx](images/debian-mariadb-2.png)
+![Intall MariaDB](images/debian-mariadb-2.png)
 
 
 ---
+
 
 #### Del 3: Wordpress
 
@@ -257,63 +270,64 @@ sudo mkdir /var/www/site2/cms/
 sudo mkdir /var/www/site2/src/
 ```
 
-Navigera till src mappen
+Navigera till src mappen.
 
 `cd /var/www/site2/src/`
 
-Ladda ner Wordpress
+Ladda ner Wordpress.
 
 `sudo wget http://wordpress.org/latest.tar.gz`
 
-Packa upp installationsfilen
+Packa upp installationsfilen.
 
 `sudo tar -xvf latest.tar.gz`
 
-Flytta filerna i wordpress till cms mappan 
+Flytta filerna i Wordpress till cms mappan. 
 
 `sudo mv wordpress/* ../cms`
 
-Visa filerna som finns i mappen */var/www/site2/src/*
+Visa filerna som finns i mappen */var/www/site2/src/*.
 
 `cd /var/www/site2/cms/`
 
 `sudo ls -la`
 
-![Intall Nginx](images/debian-wordpress-1.png)
+![Intall Wordpress](images/debian-wordpress-1.png)
 
-Sätt rättigheter till mappen med wordpress. Ett vanligt användarnnamn är `www-data` för den typen av användare. 
+Sätt rättigheter till mappen med wordpress om det saknas. Ett vanligt användarnnamn är `www-data` för den typen av användare. 
 
 `sudo chown -R www-data:www-data /var/www/site2/cms`
 
 
 **Skapa en databas för wordpress**
 
-Logga in i MariaDB
+Logga in i MariaDB.
 
 `mysql -u root -p`
 
-Skapa en databas  
+Skapa en databas.
 
 `CREATE DATABASE db_wordpress;`
 
-Skapa en databasanvändare med ett lösenord
+Skapa en databasanvändare med ett lösenord. Ange ett lösenord som uppfyller önskvärda krav - inte '*db_passord*'. 
 
 `CREATE USER 'db_user' IDENTIFIED BY 'db_password';`
 
-Ange rättigheter till en ny databasanvändaren
+Ange rättigheter till ny databasanvändare.
 
 `GRANT ALL PRIVILEGES ON db_wordpress.* TO 'db_user';`
 
-Logga ut
+Logga ut.
 
 `quit;`
 
-![Intall Nginx](images/debian-wordpress-db.png)
+![Intall Wordpress](images/debian-wordpress-db.png)
 
 
 Ändra sökvägen till root i inställningsfilen för site2. Den ska peka på underlggande mappen cms: `root /var/www/site2/cms`;
 
 `nano /etc/nginx/sites-available/site2.conf`
+
 
 *site2.conf*
 ```
@@ -338,27 +352,30 @@ server {
 }
 ```
 
-Kontrollera konfigurationsfilen
+Kontrollera konfigurationsfilen.
 
 `sudo nginx -t`
 
-Ladda om nginx för att webbplatsen med wordpress ska kunna visas  
+Ladda om nginx för att webbplatsen med wordpress ska kunna visas.  
 
 `sudo nginx -s reload`
 
 Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8082*. Wordpress har en index.php fil, och nu bör du se en sida som visar att wordpress nu kan konfigureras.
 Använd uppgifter som angavs tidigare för databas, användare och lösenord.
 
-![Intall Nginx](images/debian-wordpress-guide.png)
+![Intall Wordpress](images/debian-wordpress-guide.png)
 
 
-![Intall Nginx](images/debian-wordpress-guide-2.png)
+![Intall Wordpress](images/debian-wordpress-guide-2.png)
 
 
 ---
 
 
-### Skapa en webbplats för Node.js med nginx som proxy - site3
+### Skapa en webbplats för Node.js med nginx som proxy
+
+***site3***
+
 - port: 8083 
 - sökväg: /var/www/site3 
 
@@ -367,39 +384,40 @@ Använd uppgifter som angavs tidigare för databas, användare och lösenord.
 
 Välj version - se nodesource https://github.com/nodesource/distributions/blob/master/README.md
 
-Node.js v14.x
+I guiden används Node.js v14.x
 
-Hämta installationsfil för Node.js och installera (inkluderar npm)
+Hämta installationsfil för Node.js och installera (inkluderar npm Node Packet Manager).
 
 `curl -sL https://deb.nodesource.com/setup_14.x | bash -`
 
 `apt-get install -y nodejs`
 
-Kontrollera version
+Kontrollera version.
 
 `node -v`
 
-![Intall Nginx](images/debian-nodejs-1.png)
+![Intall Node.js](images/debian-nodejs-1.png)
 
 
-Förbered installation av moduler i Node.js  (vissa paket via npm)
+Förbered installation av moduler i Node.js (vissa paket via npm).
 
 `sudo apt install build-essential`
 
-![Intall Nginx](images/debian-nodejs-2.png)
+![Intall Node.js](images/debian-nodejs-2.png)
 
 
-Skapa mapp för webbplatsens filer
+Skapa mapp för webbplatsens filer.
 
 `sudo mkdir -p /var/www/site3`
 
 #### Node.js applikation
 
-Skapa en Hello World (en javascript fil)
+Skapa en Hello World (en javascript fil).
 
 `nano /var/www/site3/server.js`
 
 I filen använder du inbyggda modulen http för att visa filer. Se till att applikationen internt använder ett eget portnummer - ex 5000.
+
 
 *server.js*
 ```
@@ -421,7 +439,7 @@ server.listen(port, hostname, () => {
 
 #### Se till att Node.js startar automatiskt
 
-Installera pm2 (globalt)
+Installera processhanteraren *pm2* (globalt).
 
 `sudo npm install -g pm2`
 
@@ -429,25 +447,27 @@ Navigera till mappen med filen server.js
 
 `cd /var/www/site3/`
 
-Starta applikationen med pm2
+Starta applikationen med kommandot *pm2*.
 
 `pm2 start server.js`
 
 
-![Intall Nginx](images/debian-nodejs-4.png)
+![Intall pm2](images/debian-nodejs-4.png)
 
 
-Ange att pm2 automatiskt startar upp appen vid omstart av system 
+Ange att pm2 automatiskt startar upp appen vid omstart av systemet. 
 
 `pm2 startup systemd`
 
 
 #### Konfigurera nginx som proxy server
-I konfigurationsfilen ange att data hanteras till det portnummer för Node.js appen 
 
-Skapa en ngninx konfigurationsfil för site3 
+I konfigurationsfilen anges att data som skickas till en port hanteras med det internt portnummer för Node.js appen. 
+
+Skapa en ngninx konfigurationsfil för site3.
 
 `nano /etc/nginx/sites-available/site3.conf`
+
 
 *site3.conf*
 
@@ -465,23 +485,23 @@ server {
 }
 ```
 
-![Intall Nginx](images/debian-nodejs-1.png)
+![Intall Nginx proxy server för Node.js](images/debian-nodejs-1.png)
 
 
-Aktivera webbplatsen genom att länka filen i nginx 
+Aktivera webbplatsen genom att länka filen i nginx. 
 
 `sudo ln -s /etc/nginx/sites-available/site3.conf /etc/nginx/sites-enabled/`
 
-Kontrollera konfigurationsfilen
+Kontrollera konfigurationsfilen.
 
 `sudo nginx -t`
 
-Ladda om nginx för att webbplatsen ska visas  
+Ladda om nginx för att webbplatsen ska visas.  
 
 `sudo nginx -s reload`
 
 Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8083*. Nu bör du se en sida som visar Node.js appen.
 
-![Nginx proxy server till nodejs](images/debian-nginx-nodejs-2.png)
+![Nginx proxy server för Node.js](images/debian-nginx-nodejs-2.png)
 
 ---
