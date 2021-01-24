@@ -534,12 +534,15 @@ Visa filerna i root katalogen till användarkatalog som är aktuell.
 
 ![Nginx proxy server för Node.js](images/debian-deno-2.png)
 
-Lägg till sökvägen manuellt i sist i *.bashrc*
+
+Lägg till sökvägarna manuellt i sist i *.bashrc*
+
+
+*export DENO_INSTALL="/home/webmaster/.deno"*
+
+*export PATH="$DENO_INSTALL/bin:$PATH"*
 
 `sudo nano $HOME/.bash_profile`
-
-export DENO_INSTALL="/home/webmaster/.deno"
-export PATH="$DENO_INSTALL/bin:$PATH"
 
 ![Nginx proxy server för Node.js](images/debian-deno-3.png)
 
@@ -549,10 +552,11 @@ Logga ut från sessionen och logga därefter in. Nu kan du kontrollera vilken ve
 
 ![Nginx proxy server för Node.js](images/debian-deno-4.png)
 
-Testa deno_
+Testa deno med kommandot:
 
 `deno run https://deno.land/std/examples/welcome.ts`
 
+Filen använder metoden console.log(): `console.log("Welcome to Deno!");`
 
 
 #### deno http server applikation
@@ -561,12 +565,11 @@ Skapa mapp för webbplatsens filer.
 
 `sudo mkdir -p /var/www/site4`
 
-
-Skapa en Hello World (en javascript fil).
+Skapa en enkel Hello World applkation (en typescript fil).
 
 `nano /var/www/site4/webserver.ts`
 
-I filen använder du inbyggda modulen http för att visa filer. Se till att applikationen internt använder ett eget portnummer - ex 5000.
+I filen använder du inbyggda modulen http för att visa filer. Se till att applikationen internt använder ett eget portnummer - ex 5500.
 
 
 *webserver.ts*
@@ -633,7 +636,6 @@ Ladda om nginx för att webbplatsen ska visas.
 `sudo nginx -s reload`
 
 Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8084*. Nu bör du se en sida som visar Node.js appen.
-
 
 
 ---
