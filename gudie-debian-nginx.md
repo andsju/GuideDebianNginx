@@ -6,6 +6,8 @@ I guiden används en och samma server för olika webbserverspråk.
 - 8081: Hello World
 - 8082: PHP, MariaDB, och Wordpress 
 - 8083: Node.js med nginx som proxy server
+- 8084: Deno med nginx som proxy server
+
 
 I exemplet har servern följande ip-adress: 172.104.246.137. *Se till att byta ut det för att passa din konfigurering*.
 
@@ -504,13 +506,19 @@ Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8083*. Nu bö
 
 ![Nginx proxy server för Node.js](images/debian-nginx-nodejs-2.png)
 
+---
 
 
-## deno
+### Skapa en webbplats för Deno med nginx som proxy
+
+***site4***
+
+- port: 8084 
+- sökväg: /var/www/site4 
 
 Deno är ett runtime program baserat på JavaScript motorn V8. Det har stöd för JavaScript och TypeScript och baserat på programspråket Rust.
 
-Installationsfilen är i zip format och installera zip om det behövs
+Installationsfilen är i zip format och installera zip om det behövs.
 
 `sudo apt install zip`
 
