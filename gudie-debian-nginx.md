@@ -504,4 +504,128 @@ Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8083*. Nu bö
 
 ![Nginx proxy server för Node.js](images/debian-nginx-nodejs-2.png)
 
+
+
+## deno
+
+Deno är ett runtime program baserat på JavaScript motorn V8. Det har stöd för JavaScript och TypeScript och baserat på programspråket Rust.
+
+Installationsfilen är i zip format och installera zip om det behövs
+
+`sudo apt install zip`
+
+Installera deno med annat konto än root eftersom deno med fördel placereras i en lokal användarkatalog:
+
+`curl -fsSL https://deno.land/x/install/install.sh | sh`
+
+När deno installerats finns information om hur sökvägen konfigureras. 
+
+![Nginx proxy server för Node.js](images/debian-deno-1.png)
+
+Visa filerna i root katalogen till användarkatalog som är aktuell.
+
+![Nginx proxy server för Node.js](images/debian-deno-2.png)
+
+Lägg till sökvägen manuellt i sist i *.bashrc*
+
+`sudo nano $HOME/.bash_profile`
+
+export DENO_INSTALL="/home/webmaster/.deno"
+export PATH="$DENO_INSTALL/bin:$PATH"
+
+![Nginx proxy server för Node.js](images/debian-deno-3.png)
+
+Logga ut från sessionen och logga därefter in. Nu kan du kontrollera vilken version av deno som är installerad.
+
+`sudo den --version`
+
+![Nginx proxy server för Node.js](images/debian-deno-4.png)
+
+Testa deno_
+
+`deno run https://deno.land/std/examples/welcome.ts`
+
+
+
+#### deno http server applikation
+
+Skapa mapp för webbplatsens filer.
+
+`sudo mkdir -p /var/www/site4`
+
+
+Skapa en Hello World (en javascript fil).
+
+`nano /var/www/site4/webserver.ts`
+
+I filen använder du inbyggda modulen http för att visa filer. Se till att applikationen internt använder ett eget portnummer - ex 5000.
+
+
+*webserver.ts*
+```
+import { serve } from "https://deno.land/std@0.84.0/http/server.ts";
+const s = serve({ port: 5500 });
+console.log("http://localhost:5500/");
+for await (const req of s) {
+  req.respond({ body: "Hello World\n - deno" });
+}
+```
+
+Starta webservern genom att tillåta servern i nätverket.
+
+`deno run --allow-net /var/www/site4/webserver.ts`
+
+Använd processhanteraren pm2 för att starta webbservern.
+
+`pm2 start /var/www/site4/webserver.ts --interpreter="deno" --interpreter-args="run --allow-net"`
+
+Visa respons från webbservern med curl
+
+`curl http://localhost:5500`;
+
+![Nginx proxy server för Node.js](images/debian-deno-5.png)
+
+
+
+#### Konfigurera nginx som proxy server
+
+I konfigurationsfilen anges att data som skickas till en port hanteras med det internt portnummer för deno appen. 
+
+Skapa en ngninx konfigurationsfil för site4.
+
+`sudo nano /etc/nginx/sites-available/site4.conf`
+
+
+*site4.conf*
+
+```
+server {
+    listen         8084;
+    listen         [::]:8084;
+    server_name    site3 172.104.246.137;
+
+    location / {
+        proxy_set_header   X-Forwarded-For $remote_addr;
+        proxy_set_header   Host $http_host;
+        proxy_pass         http://localhost:5500;
+    }
+}
+```
+
+Aktivera webbplatsen genom att länka filen i nginx. 
+
+`sudo ln -s /etc/nginx/sites-available/site4.conf /etc/nginx/sites-enabled/`
+
+Kontrollera konfigurationsfilen.
+
+`sudo nginx -t`
+
+Ladda om nginx för att webbplatsen ska visas.  
+
+`sudo nginx -s reload`
+
+Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8084*. Nu bör du se en sida som visar Node.js appen.
+
+
+
 ---
