@@ -125,7 +125,7 @@ Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8081*. Nu bö
 ---
 
 
-### Skapa en webbplats med stöd för php, MariaDB, Wordpress  
+## Skapa en webbplats med stöd för PHP, MariaDB, Wordpress  
 
 ***site2***
 
@@ -134,9 +134,9 @@ Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8081*. Nu bö
 
 Den här guiden är uppdelad i 3 delar.
 
-#### Del 1: php
+#### Del 1: PHP
 
-Installera stöd för serverspråket php.
+Installera stöd för serverspråket PHP.
 
 `sudo apt install php-fpm`
 
@@ -145,11 +145,11 @@ Kommandot installera aktuell version som finns i Debians repo.
 ![Intall Nginx](images/debian-php-1.png)
 
 
-Visa version av php.
+Visa version av PHP.
 
 `php -v`
 
-Ange sökvägar i inställningsfilen för php (*php.ini*). Kontrollera att versionsnummer överensstämmner (redigera ev i koden nedan - se /etc/php/*7.3*/). I *php.ini* finns flertalet inställningar för om hur php funktioner är aktiva eller inte.
+Ange sökvägar i inställningsfilen för PHP (*php.ini*). Kontrollera att versionsnummer överensstämmner (redigera ev i koden nedan - se /etc/php/*7.3*/). I *php.ini* finns flertalet inställningar för om hur PHP funktioner är aktiva eller inte.
 
 `sudo sed -i 's/;cgi.fix_pathinfo=1/cgi.fix_pathinfo=0/g' /etc/php/7.3/fpm/php.ini`
 
@@ -374,7 +374,7 @@ Använd uppgifter som angavs tidigare för databas, användare och lösenord.
 ---
 
 
-### Skapa en webbplats för Node.js med nginx som proxy
+## Skapa en webbplats för Node.js med nginx som proxy
 
 ***site3***
 
@@ -509,7 +509,7 @@ Starta en webbläsare och ange ip-adressen *http://172.104.246.137:8083*. Nu bö
 ---
 
 
-### Skapa en webbplats för Deno med nginx som proxy
+## Skapa en webbplats för Deno med nginx som proxy
 
 ***site4***
 
