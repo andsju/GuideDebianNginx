@@ -11,7 +11,7 @@ I guiden används en och samma server för olika webbserverspråk.
 
 I exemplet har servern följande ip-adress: 172.104.246.137. *Se till att byta ut det för att passa din konfigurering*.
 
-*Uppdatera Debian*
+## Uppdatera Debian
 
 Logga in med ditt root konto och uppdatera systemet. 
 
