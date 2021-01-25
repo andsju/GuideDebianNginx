@@ -11,13 +11,15 @@ I guiden används en och samma server för olika webbserverspråk.
 
 I exemplet har servern följande ip-adress: 172.104.246.137. *Se till att byta ut det för att passa din konfigurering*.
 
-## Uppdatera Debian
+*Uppdatera Debian*
 
 Logga in med ditt root konto och uppdatera systemet. 
 
 `apt-get update && apt-get upgrade`
 
-Installera webbservern nginx.
+
+## Installera webbservern Nginx
+Nginx är en webserver som bland annat används som http server och proxy server. Nginx är open source och installeras med kommandot *apt install nginx*.
 
 `sudo apt install nginx`
 
@@ -41,6 +43,7 @@ Andra kommandon som du kan ange är ex *stop start reload restart enable disable
 ## Skapa en webbplats för statisk html
 
 ---
+
 
 ***site1***
 
